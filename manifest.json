@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "author": "Raphael Burce",
+  "name": "Github Jump",
+  "version": "1.0",
+  "description": "Jump to first commit on Github",
+  "action": {
+    "default_title": "Click to jump to first commit"
+  },
+  "permissions": ["activeTab", "scripting", "tabs", "nativeMessaging"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
