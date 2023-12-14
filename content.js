@@ -9,11 +9,24 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     let repo_data = JSON.parse(gitStatsInnerHTML);
 
+    console.log(repo_data);
+
     var numberOfCommits = repo_data.props.initialPayload.overview.commitCount;
+    console.log(numberOfCommits.replace(/,/g, ""), "mlem");
     var last_commit_string = repo_data.props.initialPayload.refInfo.currentOid;
+    var branch_name = repo_data.props.initialPayload.refInfo.name;
+    var repo_name = repo_data.props.initialPayload.repo.name;
+    var repo_owner = repo_data.props.initialPayload.repo.ownerLogin;
+    console.log(branch_name);
     // if it is a valid page, send number of commits - 2
     if (gitStatsElement) {
-      sendResponse([last_commit_string, numberOfCommits - 2]);
+      sendResponse([
+        repo_owner,
+        repo_name,
+        branch_name,
+        last_commit_string,
+        numberOfCommits.replace(/,/g, "") - 2,
+      ]);
     } else {
       sendResponse("data not found");
     }
