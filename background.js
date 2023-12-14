@@ -12,5 +12,4 @@ chrome.action.onClicked.addListener((tab) => {
       chrome.tabs.update(tab.id, { url: new_url });
     })
     .catch((err) => {});
-  // do something with response here, not outside the function
 });

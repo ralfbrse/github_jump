@@ -1,24 +1,21 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.message === "clicked_browser_action") {
     //get how many commits there are in repo
-    const gitStatsElement = Array.from(document.querySelectorAll("*")).find(
-      (el) => el.innerText === "Git stats"
+    let gitStatsElement = document.querySelectorAll(
+      "react-partial[partial-name='repos-overview'][data-ssr='false']"
     );
-    stat_container = gitStatsElement.parentNode;
-    const commits_text = stat_container.querySelector("strong").innerText;
-    const commits = Number(commits_text.replace(/,/g, ""));
 
-    const commitBuildStatuses = document.querySelector(
-      ".commit-build-statuses"
-    );
-    const last_commit = commitBuildStatuses.getAttribute("data-url");
-    const last_commit_string = last_commit.match(/commit\/(.*?)\/rollup/)[1];
+    let gitStatsInnerHTML = gitStatsElement[0].firstElementChild.innerHTML;
 
+    let repo_data = JSON.parse(gitStatsInnerHTML);
+
+    var numberOfCommits = repo_data.props.initialPayload.overview.commitCount;
+    var last_commit_string = repo_data.props.initialPayload.refInfo.currentOid;
     // if it is a valid page, send number of commits - 2
     if (gitStatsElement) {
-      sendResponse([last_commit_string, commits - 2]);
+      sendResponse([last_commit_string, numberOfCommits - 2]);
     } else {
-      sendResponse("no git stats element found");
+      sendResponse("data not found");
     }
   }
 });
